@@ -1,0 +1,32 @@
+{
+  "title": "Mijozlarimiz fikri",
+  "subtitle": "Faqat biz emas, butun dunyo mijozlari MobileHub haqida nima deydi?",
+  "prev": "Oldingi",
+  "next": "Keyingi",
+  "goto": "Fikrga o'tish",
+  "testimonials": [
+    {
+      "name": "Aziza Karimova",
+      "role": "Texnologiya ishqibozi",
+      "content": "Men yangi Galaxy Ultra S25 telefonimni bir oydan beri ishlatayapman va uning kamera sifati meni hayratda qoldirdi. MobileHub'dagi mijozlarga xizmat ko'rsatish ajoyib - ular menga ehtiyojlarimga mos telefonni tanlashda yordam berishdi."
+    },
+    {
+      "name": "Jamshid Alimov",
+      "role": "Professional fotograf",
+      "content": "Fotograf sifatida, ishonchli smartfon kamerasi juda muhim. MobileHub'dan xarid qilgan iPhone 16 Pro kutganlarimdan ham yaxshiroq chiqdi. Ekran sifati ajoyib va batareya quvvati uzoq vaqt yetadi."
+    },
+    {
+      "name": "Nilufar Rahimova",
+      "role": "Biznes rahbari",
+      "content": "MobileHub kompaniyamizning telefonlarini yangilashni juda osonlashtirdi. Ularning ulgurji buyurtma tizimi va biznes qo'llab-quvvatlash jamoasi juda foydali bo'ldi. Telefonlar o'z vaqtida yetkazib berildi va aynan bizga kerak bo'lgan narsalar edi."
+    }
+  ],
+  "wishlist": {
+    "empty": "Yoqtirganlar ro'yxati bo'sh",
+    "emptyDescription": "Siz hali hech qanday mahsulotni yoqtirganlarga qo'shmadingiz.",
+    "continueShopping": "Xaridni davom etish",
+    "title": "Yoqtirganlarim",
+    "success": "Muvaffaqiyatli",
+    "removed": "Yoqtirganlardan o'chirildi"
+  }
+} 

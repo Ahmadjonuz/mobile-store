@@ -1,0 +1,32 @@
+{
+  "title": "Our Customers Say",
+  "subtitle": "Not just us, hear what customers worldwide say about MobileHub",
+  "prev": "Previous",
+  "next": "Next",
+  "goto": "Go to testimonial",
+  "testimonials": [
+    {
+      "name": "Sarah Johnson",
+      "role": "Tech Enthusiast",
+      "content": "I've been using my new Galaxy Ultra S25 for a month now and I'm blown away by the camera quality. The customer service at MobileHub was exceptional - they helped me choose the perfect phone for my needs."
+    },
+    {
+      "name": "Michael Chen",
+      "role": "Professional Photographer",
+      "content": "As a photographer, having a reliable smartphone camera is essential. The iPhone 16 Pro I purchased from MobileHub has exceeded my expectations. The display is stunning and the battery life is impressive."
+    },
+    {
+      "name": "Emily Rodriguez",
+      "role": "Business Executive",
+      "content": "MobileHub made upgrading my company's phones a breeze. Their bulk ordering system and business support team were incredibly helpful. The phones arrived on time and were exactly what we needed."
+    }
+  ],
+  "wishlist": {
+    "empty": "Your wishlist is empty",
+    "emptyDescription": "You haven't added any products to your wishlist yet.",
+    "continueShopping": "Continue shopping",
+    "title": "My Wishlist",
+    "success": "Success",
+    "removed": "Removed from wishlist"
+  }
+} 
