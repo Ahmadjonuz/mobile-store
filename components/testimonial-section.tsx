@@ -26,7 +26,7 @@ export default function TestimonialSection() {
         en: "I've been using my new Galaxy Ultra S25 for a month now and I'm blown away by the camera quality. The customer service at MobileHub was exceptional - they helped me choose the perfect phone for my needs."
       },
       rating: 5,
-      image: "/images/testimonials/avatar-1.jpg"
+      image: ""
     },
     {
       id: 2,
@@ -46,7 +46,7 @@ export default function TestimonialSection() {
         en: "As a photographer, a reliable smartphone camera is very important. My iPhone 16 Pro, which I bought from MobileHub, turned out to be better than my previous devices. The screen quality is amazing and the battery life lasts a long time."
       },
       rating: 5,
-      image: "/images/testimonials/avatar-2.jpg"
+      image: ""
     },
     {
       id: 3,
@@ -66,7 +66,7 @@ export default function TestimonialSection() {
         en: "MobileHub made it much easier for us to update our phones. Our ordering system and business support team were extremely helpful. The phones were delivered on time and contained exactly what we needed."
       },
       rating: 4,
-      image: "/images/testimonials/avatar-3.jpg"
+      image: ""
     }
   ]
 

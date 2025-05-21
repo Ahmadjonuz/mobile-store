@@ -102,10 +102,10 @@ export default function HeroSection() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.8 }}
               >
-                {/* Animated particles */}
+                {/* Animated particles - Reduced for mobile */}
                 <div className="absolute inset-0 overflow-hidden">
                   <div className="particles-container">
-                    {particles.map((p, i) => (
+                    {particles.slice(0, windowSize.width < 768 ? 10 : 20).map((p, i) => (
                       <motion.div
                         key={i}
                         className="absolute rounded-full bg-white/20 backdrop-blur-sm"
@@ -113,7 +113,7 @@ export default function HeroSection() {
                           x: windowSize.width > 0 ? p.initialX * windowSize.width : 0,
                           y: windowSize.height > 0 ? p.initialY * windowSize.height : 0,
                           scale: p.scale,
-                          opacity: p.opacity,
+                          opacity: windowSize.width < 768 ? p.opacity * 0.7 : p.opacity,
                         }}
                         animate={{
                           y: [null, windowSize.height > 0 ? p.animateY * windowSize.height : 0],
@@ -125,18 +125,18 @@ export default function HeroSection() {
                           repeatType: "reverse",
                         }}
                         style={{
-                          width: `${p.width}px`,
-                          height: `${p.height}px`,
+                          width: `${windowSize.width < 768 ? p.width * 0.7 : p.width}px`,
+                          height: `${windowSize.width < 768 ? p.height * 0.7 : p.height}px`,
                         }}
                       />
                     ))}
                   </div>
                 </div>
 
-                <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center relative z-10">
-                  <div className="text-white p-6">
+                <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8 items-center relative z-10 px-4 md:px-6">
+                  <div className="text-white text-center lg:text-left">
                     <motion.h1
-                      className="text-4xl md:text-7xl font-bold mb-4 leading-tight"
+                      className="text-3xl sm:text-4xl md:text-7xl font-bold mb-3 md:mb-4 leading-tight"
                       initial={{ y: 40, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: 0.2, duration: 0.8 }}
@@ -144,7 +144,7 @@ export default function HeroSection() {
                       {slide.title.split(" ").map((word, i) => (
                         <motion.span
                           key={i}
-                          className="inline-block mr-4"
+                          className="inline-block mr-2 md:mr-4"
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.2 + i * 0.1, duration: 0.8 }}
@@ -154,7 +154,7 @@ export default function HeroSection() {
                       ))}
                     </motion.h1>
                     <motion.p
-                      className="text-xl md:text-2xl mb-8 max-w-md"
+                      className="text-lg sm:text-xl md:text-2xl mb-6 md:mb-8 max-w-md mx-auto lg:mx-0"
                       initial={{ y: 20, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: 0.4, duration: 0.8 }}
@@ -165,10 +165,10 @@ export default function HeroSection() {
                       initial={{ y: 20, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: 0.6, duration: 0.8 }}
-                      className="flex gap-4"
+                      className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center lg:justify-start"
                     >
                       <Link href="/products" passHref legacyBehavior>
-                        <Button asChild size="lg" className="rounded-full bg-white text-black hover:bg-white/90 group">   
+                        <Button asChild size="lg" className="w-full sm:w-auto rounded-full bg-white text-black hover:bg-white/90 group">   
                           <a>
                             {t("hero.shopNow")}
                             <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -176,7 +176,7 @@ export default function HeroSection() {
                         </Button>
                       </Link>
                       <Link href="/compare" passHref legacyBehavior>
-                        <Button asChild size="lg" variant="outline" className="rounded-full border-white text-white bg-transparent hover:bg-white/20">
+                        <Button asChild size="lg" variant="outline" className="w-full sm:w-auto rounded-full border-white text-white bg-transparent hover:bg-white/20">
                           <a>
                             {t("hero.compare")}
                           </a>
@@ -185,20 +185,19 @@ export default function HeroSection() {
                     </motion.div>
                   </div>
                   <motion.div
-                    className="flex items-center justify-center w-[280px] h-[580px] relative"
+                    className="flex items-center justify-center w-[220px] sm:w-[280px] h-[460px] sm:h-[580px] relative mx-auto mt-8 lg:mt-0"
                     initial={{ scale: 0.8, opacity: 0, rotateY: -30 }}
                     animate={{ scale: 1, opacity: 1, rotateY: 0 }}
                     transition={{ delay: 0.4, duration: 0.8 }}
                   >
                     {/* Phone Frame with brand-specific style and bg-image */}
                     <div
-                      className={
-                        slide.alt === 'iPhone'
-                          ? 'absolute w-full h-full bg-white border-4 border-[#bfa16a] rounded-[40px] shadow-2xl'
-                          : slide.alt === 'Samsung'
-                          ? 'absolute w-full h-full bg-white border-4 border-[#4a90e2] rounded-[28px] shadow-2xl'
-                          : 'absolute w-full h-full bg-white border-4 border-[#7c7ba0] rounded-[16px] shadow-2xl'
-                      }
+                      className={cn(
+                        'absolute w-full h-full bg-white shadow-2xl',
+                        slide.alt === 'iPhone' && 'border-4 border-[#bfa16a] rounded-[40px]',
+                        slide.alt === 'Samsung' && 'border-4 border-[#4a90e2] rounded-[28px]',
+                        slide.alt === 'Google Pixel' && 'border-4 border-[#7c7ba0] rounded-[16px]'
+                      )}
                       style={{
                         zIndex: 2,
                         backgroundImage: `url(${slide.image})`,
@@ -207,26 +206,25 @@ export default function HeroSection() {
                         backgroundRepeat: 'no-repeat',
                       }}
                     >
-                      {/* Notch/kamera */}
+                      {/* Notch/camera - adjusted sizes for mobile */}
                       {slide.alt === 'iPhone' && (
-                        <div className="absolute top-8 left-1/2 -translate-x-1/2 w-28 h-7 bg-black rounded-[20px] z-20 shadow-md border border-gray-800 flex items-center justify-center">
-                          {/* Dynamic Island dots */}
-                          <div className="w-2 h-2 bg-gray-700 rounded-full mx-1"></div>
-                          <div className="w-3 h-3 bg-gray-800 rounded-full mx-1"></div>
+                        <div className="absolute top-6 sm:top-8 left-1/2 -translate-x-1/2 w-20 sm:w-28 h-5 sm:h-7 bg-black rounded-[20px] z-20 shadow-md border border-gray-800 flex items-center justify-center">
+                          <div className="w-1.5 sm:w-2 h-1.5 sm:h-2 bg-gray-700 rounded-full mx-1"></div>
+                          <div className="w-2 sm:w-3 h-2 sm:h-3 bg-gray-800 rounded-full mx-1"></div>
                         </div>
                       )}
                       {slide.alt === 'Samsung' && (
-                        <div className="absolute top-4 left-1/2 -translate-x-1/2 w-5 h-5 bg-gray-700 rounded-full z-20 border-2 border-white"></div>
+                        <div className="absolute top-3 sm:top-4 left-1/2 -translate-x-1/2 w-4 sm:w-5 h-4 sm:h-5 bg-gray-700 rounded-full z-20 border-2 border-white"></div>
                       )}
                       {slide.alt === 'Google Pixel' && (
-                        <div className="absolute top-4 left-1/2 -translate-x-1/2 w-6 h-6 bg-gray-500 rounded-full z-20 border-2 border-white"></div>
+                        <div className="absolute top-3 sm:top-4 left-1/2 -translate-x-1/2 w-5 sm:w-6 h-5 sm:h-6 bg-gray-500 rounded-full z-20 border-2 border-white"></div>
                       )}
                     </div>
                   </motion.div>
                 </div>
-                <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+                <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-20">
                   <button onClick={scrollToContent} className="animate-bounce text-white">
-                    <ChevronDown className="w-10 h-10" />
+                    <ChevronDown className="w-8 sm:w-10 h-8 sm:h-10" />
                   </button>
                 </div>
               </motion.div>

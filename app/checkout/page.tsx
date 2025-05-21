@@ -4,7 +4,7 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useLanguage } from "@/contexts/language-context"
 import { useCurrency } from "@/contexts/currency-context"
-import { Check, CreditCard, ArrowRight, ArrowLeft, ShoppingCart } from "lucide-react"
+import { Check, CreditCard, ArrowRight, ArrowLeft, ShoppingCart, Banknote } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -18,6 +18,7 @@ import { useCart } from '@/contexts/cart-context'
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
+import { OrderSuccess } from "@/components/OrderSuccess"
 
 const translations = {
   en: {
@@ -58,6 +59,14 @@ const translations = {
     thankYou: "Thank you for your order!",
     orderConfirmation: "Your order has been confirmed. You will receive an email confirmation shortly.",
     remove: "Remove",
+    loginRequired: "You need to be logged in to place an order",
+    fillShippingDetails: "Please fill in all shipping details",
+    orderError: "Error creating order",
+    unknownError: "Unknown error",
+    emptyCart: "Your cart is empty",
+    goToProducts: "Go to products page to add items to your cart",
+    goToProductsButton: "Go to Products",
+    cashPayment: "Cash Payment",
   },
   es: {
     checkout: "Pago",
@@ -97,6 +106,14 @@ const translations = {
     thankYou: "¡Gracias por tu pedido!",
     orderConfirmation: "Tu pedido ha sido confirmado. Recibirás un correo electrónico de confirmación en breve.",
     remove: "Eliminar",
+    loginRequired: "Debe iniciar sesión para realizar un pedido",
+    fillShippingDetails: "Por favor complete todos los datos de envío",
+    orderError: "Error al crear el pedido",
+    unknownError: "Error desconocido",
+    emptyCart: "Su carrito está vacío",
+    goToProducts: "Vaya a la página de productos para agregar artículos a su carrito",
+    goToProductsButton: "Ir a Productos",
+    cashPayment: "Pago en efectivo",
   },
   fr: {
     checkout: "Paiement",
@@ -136,8 +153,109 @@ const translations = {
     thankYou: "Merci pour votre commande!",
     orderConfirmation: "Votre commande a été confirmée. Vous recevrez un email de confirmation sous peu.",
     remove: "Supprimer",
+    loginRequired: "Vous devez être connecté pour passer une commande",
+    fillShippingDetails: "Veuillez remplir tous les détails de livraison",
+    orderError: "Erreur lors de la création de la commande",
+    unknownError: "Erreur inconnue",
+    emptyCart: "Votre panier est vide",
+    goToProducts: "Accédez à la page des produits pour ajouter des articles à votre panier",
+    goToProductsButton: "Voir les Produits",
+    cashPayment: "Paiement en espèces",
   },
-  // Add more languages as needed
+  uz: {
+    checkout: "To'lov",
+    cart: "Savatingiz",
+    shipping: "Yetkazib berish",
+    payment: "To'lov",
+    confirmation: "Tasdiqlash",
+    next: "Keyingisi",
+    back: "Orqaga",
+    placeOrder: "Buyurtma berish",
+    orderComplete: "Buyurtma yakunlandi!",
+    orderNumber: "Buyurtma raqami",
+    continueShopping: "Xarid qilishni davom ettirish",
+    subtotal: "Oraliq summa",
+    tax: "Soliq",
+    total: "Jami",
+    shippingAddress: "Yetkazib berish manzili",
+    fullName: "To'liq ism",
+    address: "Manzil",
+    city: "Shahar",
+    zipCode: "Pochta indeksi",
+    country: "Mamlakat",
+    paymentMethod: "To'lov usuli",
+    creditCard: "Kredit karta",
+    paypal: "PayPal",
+    applePay: "Apple Pay",
+    googlePay: "Google Pay",
+    cardNumber: "Karta raqami",
+    expiryDate: "Amal qilish muddati",
+    cvv: "CVV",
+    nameOnCard: "Kartadagi ism",
+    standard: "Standart yetkazib berish",
+    express: "Tezkor yetkazib berish",
+    overnight: "Bir kunlik yetkazib berish",
+    free: "Bepul",
+    orderSummary: "Buyurtma tafsilotlari",
+    thankYou: "Buyurtmangiz uchun rahmat!",
+    orderConfirmation: "Buyurtmangiz tasdiqlandi. Tez orada tasdiqlash xabari elektron pochtangizga yuboriladi.",
+    remove: "O'chirish",
+    loginRequired: "Buyurtma berish uchun tizimga kirishingiz kerak",
+    fillShippingDetails: "Iltimos, yetkazib berish ma'lumotlarini to'ldiring",
+    orderError: "Buyurtma yaratishda xatolik",
+    unknownError: "Noma'lum xatolik",
+    emptyCart: "Savat bo'sh",
+    goToProducts: "Savatga mahsulot qo'shish uchun mahsulotlar sahifasiga o'ting",
+    goToProductsButton: "Mahsulotlar sahifasiga o'tish",
+    cashPayment: "Naqd pul orqali to'lov",
+  },
+  ru: {
+    checkout: "Оплата",
+    cart: "Ваша корзина",
+    shipping: "Доставка",
+    payment: "Оплата",
+    confirmation: "Подтверждение",
+    next: "Далее",
+    back: "Назад",
+    placeOrder: "Оформить заказ",
+    orderComplete: "Заказ оформлен!",
+    orderNumber: "Номер заказа",
+    continueShopping: "Продолжить покупки",
+    subtotal: "Подытог",
+    tax: "Налог",
+    total: "Итого",
+    shippingAddress: "Адрес доставки",
+    fullName: "Полное имя",
+    address: "Адрес",
+    city: "Город",
+    zipCode: "Почтовый индекс",
+    country: "Страна",
+    paymentMethod: "Способ оплаты",
+    creditCard: "Кредитная карта",
+    paypal: "PayPal",
+    applePay: "Apple Pay",
+    googlePay: "Google Pay",
+    cardNumber: "Номер карты",
+    expiryDate: "Срок действия",
+    cvv: "CVV",
+    nameOnCard: "Имя на карте",
+    standard: "Стандартная доставка",
+    express: "Экспресс доставка",
+    overnight: "Доставка за сутки",
+    free: "Бесплатно",
+    orderSummary: "Сводка заказа",
+    thankYou: "Спасибо за ваш заказ!",
+    orderConfirmation: "Ваш заказ подтвержден. Вы получите подтверждение по электронной почте в ближайшее время.",
+    remove: "Удалить",
+    loginRequired: "Для оформления заказа необходимо войти в систему",
+    fillShippingDetails: "Пожалуйста, заполните все данные о доставке",
+    orderError: "Ошибка при создании заказа",
+    unknownError: "Неизвестная ошибка",
+    emptyCart: "Корзина пуста",
+    goToProducts: "Перейдите на страницу товаров, чтобы добавить товары в корзину",
+    goToProductsButton: "Перейти к товарам",
+    cashPayment: "Оплата наличными",
+  }
 }
 
 type Translation = typeof translations['en']
@@ -184,6 +302,15 @@ function CheckoutStepper({ step, t }: { step: number, t: Translation }) {
 export default function CheckoutPage() {
   const [step, setStep] = useState(0)
   const [orderNumber, setOrderNumber] = useState("")
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [shippingData, setShippingData] = useState({
+    full_name: "",
+    address: "",
+    city: "",
+    zip_code: "",
+    country: ""
+  })
+  const [paymentMethod, setPaymentMethod] = useState("card")
   const { language } = useLanguage()
   const { currency, formatPrice } = useCurrency()
   const t = getTranslation(language)
@@ -192,47 +319,88 @@ export default function CheckoutPage() {
 
   const steps = [t.cart, t.shipping, t.payment, t.confirmation]
 
+  const handleShippingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setShippingData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handlePaymentChange = (value: string) => {
+    setPaymentMethod(value);
+  };
+
   const handleNext = async () => {
     if (step < steps.length - 1) {
-      // If moving to confirmation step, create order in Supabase
       if (step === 2) {
-        if (user) {
-          const orderItems = items.map(item => ({
-            id: item.product.id,
-            name: item.product.name,
-            price: item.product.price,
-            quantity: item.quantity,
-          }));
-          const { error } = await supabase.from('orders').insert([
-            {
-              user_id: user.id,
-              items: JSON.stringify(orderItems),
-              total: total,
-              status: 'pending',
-            },
-          ]);
-          if (!error) {
-            setOrderNumber(`ORD-${Math.floor(100000 + Math.random() * 900000)}`);
-            setTimeout(() => {
-              confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { y: 0.6 },
-              });
-            }, 500);
-            clearCart();
-          } else {
-            alert('Order creation failed!');
+        try {
+          if (!user) {
+            alert(t.loginRequired);
             return;
           }
-        } else {
-          alert('You must be logged in to place an order.');
-          return;
+
+          console.log("Current user:", user);
+
+          if (!shippingData.full_name || !shippingData.address || !shippingData.city || !shippingData.zip_code || !shippingData.country) {
+            alert(t.fillShippingDetails);
+            return;
+          }
+
+          const newOrder = {
+            user_id: user.id,
+            items: items.map(item => ({
+              product_id: item.product.id,
+              name: item.product.name,
+              price: item.product.price,
+              quantity: item.quantity,
+            })),
+            total: total,
+            status: 'pending',
+            shipping_details: shippingData,
+            payment_details: {
+              method: paymentMethod,
+              status: 'pending',
+              payment_time: null,
+              transaction_id: null
+            }
+          };
+
+          console.log("Order details:", newOrder);
+
+          const { data: orderData, error: orderError } = await supabase
+            .from('orders')
+            .insert([newOrder])
+            .select('id')
+            .single();
+
+          if (orderError) {
+            console.error("Error creating order:", orderError);
+            throw new Error(orderError.message);
+          }
+
+          const newOrderNumber = `ORD-${orderData?.id || Math.floor(100000 + Math.random() * 900000)}`;
+          setOrderNumber(newOrderNumber);
+          
+          setShowSuccess(true);
+          
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+
+          clearCart();
+          setStep(step + 1);
+        } catch (error) {
+          console.error("Error creating order:", error);
+          alert(t.orderError + ": " + (error instanceof Error ? error.message : t.unknownError));
         }
+      } else {
+        setStep(step + 1);
       }
-      setStep(step + 1);
     }
-  }
+  };
 
   const handleBack = () => {
     if (step > 0) {
@@ -263,22 +431,10 @@ export default function CheckoutPage() {
                       <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
                         <ShoppingCart className="w-10 h-10 text-muted-foreground" />
                       </div>
-                      <h3 className="text-xl font-semibold mb-2">
-                        {language === "uz" && "Savat bo'sh"}
-                        {language === "ru" && "Корзина пуста"}
-                        {language === "en" && "Your cart is empty"}
-                      </h3>
-                      <p className="text-muted-foreground mb-6">
-                        {language === "uz" && "Savatga mahsulot qo'shish uchun mahsulotlar sahifasiga o'ting"}
-                        {language === "ru" && "Перейдите на страницу товаров, чтобы добавить товары в корзину"}
-                        {language === "en" && "Go to products page to add items to your cart"}
-                      </p>
+                      <h3 className="text-xl font-semibold mb-2">{t.emptyCart}</h3>
+                      <p className="text-muted-foreground mb-6">{t.goToProducts}</p>
                       <Button asChild>
-                        <Link href="/products">
-                          {language === "uz" && "Mahsulotlar sahifasiga o'tish"}
-                          {language === "ru" && "Перейти к товарам"}
-                          {language === "en" && "Go to Products"}
-                        </Link>
+                        <Link href="/products">{t.goToProductsButton}</Link>
                       </Button>
                     </div>
                   ) : (
@@ -347,24 +503,54 @@ export default function CheckoutPage() {
                   <h2 className="text-2xl font-bold mb-6">{t.shippingAddress}</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="fullName">{t.fullName}</Label>
-                      <Input id="fullName" placeholder="John Doe" />
+                      <Label htmlFor="full_name">{t.fullName}</Label>
+                      <Input
+                        id="full_name"
+                        name="full_name"
+                        value={shippingData.full_name}
+                        onChange={handleShippingChange}
+                        placeholder="John Doe"
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="address">{t.address}</Label>
-                      <Input id="address" placeholder="123 Main St" />
+                      <Input
+                        id="address"
+                        name="address"
+                        value={shippingData.address}
+                        onChange={handleShippingChange}
+                        placeholder="123 Main St"
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="city">{t.city}</Label>
-                      <Input id="city" placeholder="New York" />
+                      <Input
+                        id="city"
+                        name="city"
+                        value={shippingData.city}
+                        onChange={handleShippingChange}
+                        placeholder="New York"
+                      />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="zipCode">{t.zipCode}</Label>
-                      <Input id="zipCode" placeholder="10001" />
+                      <Label htmlFor="zip_code">{t.zipCode}</Label>
+                      <Input
+                        id="zip_code"
+                        name="zip_code"
+                        value={shippingData.zip_code}
+                        onChange={handleShippingChange}
+                        placeholder="10001"
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="country">{t.country}</Label>
-                      <Input id="country" placeholder="United States" />
+                      <Input
+                        id="country"
+                        name="country"
+                        value={shippingData.country}
+                        onChange={handleShippingChange}
+                        placeholder="United States"
+                      />
                     </div>
                   </div>
                 </div>
@@ -373,19 +559,19 @@ export default function CheckoutPage() {
               {step === 2 && (
                 <div className="space-y-6">
                   <h2 className="text-2xl font-bold mb-6">{t.paymentMethod}</h2>
-                  <RadioGroup defaultValue="creditCard" className="space-y-4">
+                  <RadioGroup defaultValue="card" value={paymentMethod} onValueChange={handlePaymentChange} className="space-y-4">
                     <div className="flex items-center space-x-2 p-4 border rounded-lg hover:border-primary transition-colors">
-                      <RadioGroupItem value="creditCard" id="creditCard" />
-                      <Label htmlFor="creditCard" className="flex items-center gap-2 cursor-pointer">
+                      <RadioGroupItem value="card" id="card" />
+                      <Label htmlFor="card" className="flex items-center gap-2 cursor-pointer">
                         <CreditCard className="w-5 h-5" />
                         {t.creditCard}
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2 p-4 border rounded-lg hover:border-primary transition-colors">
-                      <RadioGroupItem value="paypal" id="paypal" />
-                      <Label htmlFor="paypal" className="flex items-center gap-2 cursor-pointer">
-                        <CreditCard className="w-5 h-5" />
-                        {t.paypal}
+                      <RadioGroupItem value="cash" id="cash" />
+                      <Label htmlFor="cash" className="flex items-center gap-2 cursor-pointer">
+                        <Banknote className="w-5 h-5" />
+                        {t.cashPayment}
                       </Label>
                     </div>
                   </RadioGroup>
@@ -464,6 +650,11 @@ export default function CheckoutPage() {
           </div>
         </div>
       </div>
+
+      <OrderSuccess 
+        isOpen={showSuccess} 
+        onClose={() => setShowSuccess(false)} 
+      />
     </div>
   )
 }

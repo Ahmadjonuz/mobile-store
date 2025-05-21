@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { Minus, Plus, Trash2 } from 'lucide-react'
 import { useCurrency } from '@/contexts/currency-context'
 import { useLanguage } from '@/contexts/language-context'
+import { useEffect } from 'react'
 
 export default function CartPage() {
   const { items, removeFromCart, updateQuantity } = useCart()
@@ -17,8 +18,13 @@ export default function CartPage() {
   const { formatPrice } = useCurrency()
   const { t } = useLanguage()
 
+  useEffect(() => {
+    if (!user) {
+      router.push('/auth/login')
+    }
+  }, [user, router])
+
   if (!user) {
-    router.push('/auth/login')
     return null
   }
 

@@ -157,19 +157,9 @@ export default function LoginPage() {
     setIsLoading(true)
 
     try {
-      await signIn(formData.email, formData.password)
-        toast({
-          title: "Success!",
-          description: "You have successfully logged in.",
-        })
-        router.push("/")
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Invalid email or password. Please try again.",
-        variant: "destructive",
-      })
-    } finally {
+      await signIn(formData.email, formData.password, formData.rememberMe)
+    } catch (error: any) {
+      // Error handling is now done in auth context
       setIsLoading(false)
     }
   }
@@ -219,7 +209,10 @@ export default function LoginPage() {
                     <Lock className="h-4 w-4" />
                     {t.password}
                   </Label>
-                  <Link href="/auth/forgot-password" className="text-sm text-primary hover:underline">
+                  <Link 
+                    href="/auth/forgot-password" 
+                    className="text-sm text-primary hover:underline"
+                  >
                     {t.forgotPassword}
                   </Link>
                 </div>

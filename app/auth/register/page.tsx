@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { useLanguage } from "@/contexts/language-context"
 import { Button } from "@/components/ui/button"
@@ -11,69 +10,11 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Separator } from "@/components/ui/separator"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Eye, EyeOff, Mail, Lock, User, Github, Twitter } from "lucide-react"
+import { Eye, EyeOff, Mail, Lock, User, Github, Twitter, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useAuth } from "@/contexts/auth-context"
 
 const translations = {
-  en: {
-    register: "Register",
-    registerDescription: "Create an account to start shopping",
-    firstName: "First Name",
-    firstNamePlaceholder: "Enter your first name",
-    lastName: "Last Name",
-    lastNamePlaceholder: "Enter your last name",
-    email: "Email",
-    emailPlaceholder: "Enter your email",
-    password: "Password",
-    passwordPlaceholder: "Create a password",
-    confirmPassword: "Confirm Password",
-    confirmPasswordPlaceholder: "Confirm your password",
-    termsAndConditions: "I agree to the Terms and Conditions",
-    registerButton: "Create Account",
-    haveAccount: "Already have an account?",
-    login: "Login",
-    or: "OR",
-    continueWith: "Continue with",
-    firstNameRequired: "First name is required",
-    lastNameRequired: "Last name is required",
-    emailRequired: "Email is required",
-    emailInvalid: "Please enter a valid email",
-    passwordRequired: "Password is required",
-    passwordShort: "Password must be at least 6 characters",
-    confirmPasswordRequired: "Please confirm your password",
-    passwordsDoNotMatch: "Passwords do not match",
-    termsRequired: "You must agree to the Terms and Conditions",
-  },
-  ru: {
-    register: "Регистрация",
-    registerDescription: "Создайте аккаунт, чтобы начать покупки",
-    firstName: "Имя",
-    firstNamePlaceholder: "Введите ваше имя",
-    lastName: "Фамилия",
-    lastNamePlaceholder: "Введите вашу фамилию",
-    email: "Email",
-    emailPlaceholder: "Введите ваш email",
-    password: "Пароль",
-    passwordPlaceholder: "Создайте пароль",
-    confirmPassword: "Подтвердите пароль",
-    confirmPasswordPlaceholder: "Подтвердите ваш пароль",
-    termsAndConditions: "Я согласен с Условиями использования",
-    registerButton: "Создать аккаунт",
-    haveAccount: "Уже есть аккаунт?",
-    login: "Войти",
-    or: "ИЛИ",
-    continueWith: "Продолжить с",
-    firstNameRequired: "Имя обязательно",
-    lastNameRequired: "Фамилия обязательна",
-    emailRequired: "Email обязателен",
-    emailInvalid: "Пожалуйста, введите корректный email",
-    passwordRequired: "Пароль обязателен",
-    passwordShort: "Пароль должен содержать минимум 6 символов",
-    confirmPasswordRequired: "Пожалуйста, подтвердите пароль",
-    passwordsDoNotMatch: "Пароли не совпадают",
-    termsRequired: "Вы должны согласиться с Условиями использования",
-  },
   uz: {
     register: "Ro'yxatdan o'tish",
     registerDescription: "Xarid qilishni boshlash uchun hisob yarating",
@@ -98,19 +39,23 @@ const translations = {
     emailRequired: "Email kiritish shart",
     emailInvalid: "Iltimos, to'g'ri email kiriting",
     passwordRequired: "Parol kiritish shart",
-    passwordShort: "Parol kamida 6 ta belgidan iborat bo'lishi kerak",
+    passwordShort: "Parol kamida 8 ta belgidan iborat bo'lishi kerak",
+    passwordUppercase: "Parolda kamida 1 ta katta harf bo'lishi kerak",
+    passwordLowercase: "Parolda kamida 1 ta kichik harf bo'lishi kerak",
+    passwordNumber: "Parolda kamida 1 ta raqam bo'lishi kerak",
+    passwordSpecial: "Parolda kamida 1 ta maxsus belgi bo'lishi kerak (!@#$%^&*)",
     confirmPasswordRequired: "Iltimos, parolni tasdiqlang",
     passwordsDoNotMatch: "Parollar mos kelmaydi",
     termsRequired: "Foydalanish shartlariga rozilik bildirishingiz kerak",
-  },
+    registering: "Ro'yxatdan o'tilmoqda..."
+  }
 }
 
 export default function RegisterPage() {
   const { language } = useLanguage()
-  const t = translations[language] || translations.en
-  const router = useRouter()
-  const { toast } = useToast()
+  const t = translations[language] || translations.uz
   const { signUp } = useAuth()
+  const { toast } = useToast()
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -118,7 +63,7 @@ export default function RegisterPage() {
     email: "",
     password: "",
     confirmPassword: "",
-    termsAccepted: false,
+    termsAccepted: false
   })
 
   const [errors, setErrors] = useState({
@@ -127,7 +72,7 @@ export default function RegisterPage() {
     email: "",
     password: "",
     confirmPassword: "",
-    termsAccepted: "",
+    termsAccepted: ""
   })
 
   const [showPassword, setShowPassword] = useState(false)
@@ -136,31 +81,31 @@ export default function RegisterPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setFormData({
-      ...formData,
-      [name]: value,
-    })
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
 
-    // Clear errors when typing
+    // Xatolarni tozalash
     if (errors[name as keyof typeof errors]) {
-      setErrors({
-        ...errors,
-        [name]: "",
-      })
+      setErrors(prev => ({
+        ...prev,
+        [name]: ""
+      }))
     }
   }
 
   const handleCheckboxChange = (checked: boolean) => {
-    setFormData({
-      ...formData,
-      termsAccepted: checked,
-    })
+    setFormData(prev => ({
+      ...prev,
+      termsAccepted: checked
+    }))
 
     if (errors.termsAccepted) {
-      setErrors({
-        ...errors,
-        termsAccepted: "",
-      })
+      setErrors(prev => ({
+        ...prev,
+        termsAccepted: ""
+      }))
     }
   }
 
@@ -171,37 +116,56 @@ export default function RegisterPage() {
       email: "",
       password: "",
       confirmPassword: "",
-      termsAccepted: "",
+      termsAccepted: ""
     }
 
     let isValid = true
 
+    // Ism tekshiruvi
     if (!formData.firstName.trim()) {
       newErrors.firstName = t.firstNameRequired
       isValid = false
     }
 
+    // Familiya tekshiruvi
     if (!formData.lastName.trim()) {
       newErrors.lastName = t.lastNameRequired
       isValid = false
     }
 
+    // Email tekshiruvi
     if (!formData.email) {
       newErrors.email = t.emailRequired
       isValid = false
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)) {
       newErrors.email = t.emailInvalid
       isValid = false
     }
 
+    // Parol tekshiruvi
     if (!formData.password) {
       newErrors.password = t.passwordRequired
       isValid = false
-    } else if (formData.password.length < 6) {
-      newErrors.password = t.passwordShort
-      isValid = false
+    } else {
+      if (formData.password.length < 8) {
+        newErrors.password = t.passwordShort
+        isValid = false
+      } else if (!/[A-Z]/.test(formData.password)) {
+        newErrors.password = t.passwordUppercase
+        isValid = false
+      } else if (!/[a-z]/.test(formData.password)) {
+        newErrors.password = t.passwordLowercase
+        isValid = false
+      } else if (!/[0-9]/.test(formData.password)) {
+        newErrors.password = t.passwordNumber
+        isValid = false
+      } else if (!/[!@#$%^&*]/.test(formData.password)) {
+        newErrors.password = t.passwordSpecial
+        isValid = false
+      }
     }
 
+    // Parol tasdiqlash tekshiruvi
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = t.confirmPasswordRequired
       isValid = false
@@ -210,6 +174,7 @@ export default function RegisterPage() {
       isValid = false
     }
 
+    // Shartlar tekshiruvi
     if (!formData.termsAccepted) {
       newErrors.termsAccepted = t.termsRequired
       isValid = false
@@ -229,30 +194,11 @@ export default function RegisterPage() {
     setIsLoading(true)
 
     try {
-      const fullName = `${formData.firstName} ${formData.lastName}`
+      const fullName = `${formData.firstName} ${formData.lastName}`.trim()
       await signUp(formData.email, formData.password, fullName)
-        toast({
-          title: "Success!",
-          description: "Your account has been created successfully.",
-        })
-        router.push("/")
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to create account. Please try again.",
-        variant: "destructive",
-      })
-    } finally {
       setIsLoading(false)
     }
-  }
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword)
-  }
-
-  const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(!showConfirmPassword)
   }
 
   return (
@@ -285,7 +231,9 @@ export default function RegisterPage() {
                     className={errors.firstName ? "border-red-500" : ""}
                     disabled={isLoading}
                   />
-                  {errors.firstName && <p className="text-sm text-red-500">{errors.firstName}</p>}
+                  {errors.firstName && (
+                    <p className="text-sm text-red-500">{errors.firstName}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -302,7 +250,9 @@ export default function RegisterPage() {
                     className={errors.lastName ? "border-red-500" : ""}
                     disabled={isLoading}
                   />
-                  {errors.lastName && <p className="text-sm text-red-500">{errors.lastName}</p>}
+                  {errors.lastName && (
+                    <p className="text-sm text-red-500">{errors.lastName}</p>
+                  )}
                 </div>
               </div>
 
@@ -321,7 +271,9 @@ export default function RegisterPage() {
                   className={errors.email ? "border-red-500" : ""}
                   disabled={isLoading}
                 />
-                {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
+                {errors.email && (
+                  <p className="text-sm text-red-500">{errors.email}</p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -342,13 +294,19 @@ export default function RegisterPage() {
                   />
                   <button
                     type="button"
-                    onClick={togglePasswordVisibility}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
-                {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
+                {errors.password && (
+                  <p className="text-sm text-red-500">{errors.password}</p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -369,13 +327,19 @@ export default function RegisterPage() {
                   />
                   <button
                     type="button"
-                    onClick={toggleConfirmPasswordVisibility}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                   >
-                    {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showConfirmPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
-                {errors.confirmPassword && <p className="text-sm text-red-500">{errors.confirmPassword}</p>}
+                {errors.confirmPassword && (
+                  <p className="text-sm text-red-500">{errors.confirmPassword}</p>
+                )}
               </div>
 
               <div className="flex items-center space-x-2">
@@ -389,13 +353,15 @@ export default function RegisterPage() {
                   {t.termsAndConditions}
                 </Label>
               </div>
-              {errors.termsAccepted && <p className="text-sm text-red-500">{errors.termsAccepted}</p>}
+              {errors.termsAccepted && (
+                <p className="text-sm text-red-500">{errors.termsAccepted}</p>
+              )}
 
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (
                   <div className="flex items-center justify-center">
-                    <div className="h-4 w-4 border-2 border-t-transparent border-white rounded-full animate-spin mr-2"></div>
-                    {t.registerButton}...
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    {t.registering}
                   </div>
                 ) : (
                   t.registerButton
@@ -408,7 +374,9 @@ export default function RegisterPage() {
                 <Separator />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">{t.or}</span>
+                <span className="bg-background px-2 text-muted-foreground">
+                  {t.or}
+                </span>
               </div>
             </div>
 
